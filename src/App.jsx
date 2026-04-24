@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import './App.css'
 
 function App() {
@@ -6,6 +6,12 @@ function App() {
   const [selectedDay, setSelectedDay] = useState(null);
   const [eventText, setEventText] = useState("");
   const [events, setEvents] = useState({});
+  
+  // XP and Leveling Logic
+  const [xp, setXp] = useState(0);
+  const xpPerLevel = 100;
+  const currentLevel = Math.floor(xp / xpPerLevel) + 1;
+  const progress = (xp % xpPerLevel); // How far into the current level
 
   const monthNames = ["January", "February", "March", "April", "May", "June",
     "July", "August", "September", "October", "November", "December"];
@@ -29,32 +35,39 @@ function App() {
     setEventText("");
   };
 
-  const deleteEvent = (dateKey, indexToDelete) => {
+  const completeTask = (dateKey, indexToDelete) => {
+    // Reward 20 XP for completing a task
+    setXp(prev => prev + 20);
+    
     const updatedEvents = { ...events };
     updatedEvents[dateKey] = updatedEvents[dateKey].filter((_, index) => index !== indexToDelete);
     if (updatedEvents[dateKey].length === 0) delete updatedEvents[dateKey];
     setEvents(updatedEvents);
   };
 
-  const changeMonth = (offset) => {
-    setCurrentDate(new Date(year, month + offset, 1));
-    setSelectedDay(null);
-  };
-
   return (
     <div className="main-container">
+      {/* XP Bar Header */}
+      <div className="xp-container">
+        <div className="xp-info">
+          <span>Level {currentLevel}</span>
+          <span>{progress} / {xpPerLevel} XP</span>
+        </div>
+        <div className="xp-bar-bg">
+          <div className="xp-bar-fill" style={{ width: `${progress}%` }}></div>
+        </div>
+      </div>
+
       <div className="calendar-card">
         <header className="calendar-header">
-          <button className="nav-btn" onClick={() => changeMonth(-1)}>&lt;</button>
+          <button className="nav-btn" onClick={() => setCurrentDate(new Date(year, month - 1, 1))}>&lt;</button>
           <h2>{monthNames[month]} {year}</h2>
-          <button className="nav-btn" onClick={() => changeMonth(1)}>&gt;</button>
+          <button className="nav-btn" onClick={() => setCurrentDate(new Date(year, month + 1, 1))}>&gt;</button>
         </header>
 
         <div className="calendar-grid">
           {weekDays.map(day => <div key={day} className="weekday">{day}</div>)}
-          
           {blanks.map((_, i) => <div key={`b-${i}`} className="day empty"></div>)}
-          
           {daysArray.map(day => {
             const dateKey = getDateKey(day);
             const hasEvents = events[dateKey] && events[dateKey].length > 0;
@@ -73,12 +86,12 @@ function App() {
 
         {selectedDay && (
           <div className="schedule-box">
-            <p className="date-label">{monthNames[month]} {selectedDay}, {year}</p>
+            <p className="date-label">{monthNames[month]} {selectedDay}</p>
             <div className="event-input">
               <input 
                 value={eventText} 
                 onChange={(e) => setEventText(e.target.value)} 
-                placeholder="New event..."
+                placeholder="Assign task..."
                 onKeyDown={(e) => e.key === 'Enter' && handleAddEvent()}
               />
               <button onClick={handleAddEvent}>Add</button>
@@ -87,7 +100,7 @@ function App() {
               {(events[getDateKey(selectedDay)] || []).map((ev, i) => (
                 <li key={i} className="event-item">
                   <span>{ev}</span>
-                  <button className="delete-btn" onClick={() => deleteEvent(getDateKey(selectedDay), i)}>×</button>
+                  <button className="complete-btn" onClick={() => completeTask(getDateKey(selectedDay), i)}>✓</button>
                 </li>
               ))}
             </ul>

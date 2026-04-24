@@ -2,27 +2,55 @@
   width: 100%;
   margin: 0 auto;
   padding: 0;
-  text-align: center;
 }
 
 body {
   margin: 0;
   display: flex;
-  place-items: center;
-  min-width: 320px;
+  justify-content: center;
   min-height: 100vh;
   background-color: #f6f8fa;
-  font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
 .main-container {
-  width: 100vw;
   display: flex;
-  justify-content: center;
-  align-items: flex-start;
-  padding-top: 40px;
+  flex-direction: column;
+  align-items: center;
+  padding-top: 20px;
+  width: 100%;
 }
 
+/* XP Bar Styles */
+.xp-container {
+  width: 360px;
+  margin-bottom: 20px;
+}
+
+.xp-info {
+  display: flex;
+  justify-content: space-between;
+  font-weight: bold;
+  font-size: 0.85rem;
+  margin-bottom: 5px;
+  color: #444;
+}
+
+.xp-bar-bg {
+  width: 100%;
+  height: 12px;
+  background: #e0e0e0;
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+.xp-bar-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #4facfe 0%, #00f2fe 100%);
+  transition: width 0.4s ease-out;
+}
+
+/* Calendar Styles */
 .calendar-card {
   background: white;
   width: 360px;
@@ -39,24 +67,12 @@ body {
   margin-bottom: 20px;
 }
 
-.calendar-header h2 {
-  font-size: 1.2rem;
-  margin: 0;
-  color: #1a1a1a;
-}
-
 .nav-btn {
   background: #f0f0f0;
   border: none;
   padding: 8px 12px;
   border-radius: 8px;
   cursor: pointer;
-  font-weight: bold;
-  color: #555;
-}
-
-.nav-btn:hover {
-  background: #e5e5e5;
 }
 
 .calendar-grid {
@@ -69,36 +85,23 @@ body {
   font-size: 0.75rem;
   font-weight: 700;
   color: #bbb;
-  text-align: center;
   padding-bottom: 10px;
 }
 
 .day {
   aspect-ratio: 1;
   display: flex;
-  flex-direction: column;
   align-items: center;
   justify-content: center;
   cursor: pointer;
   border-radius: 10px;
   font-size: 0.95rem;
   position: relative;
-  color: #444;
-}
-
-.day:hover:not(.empty) {
-  background: #f8f9ff;
-  color: #646cff;
 }
 
 .day.active {
   background: #646cff !important;
   color: white !important;
-  font-weight: bold;
-}
-
-.day.empty {
-  cursor: default;
 }
 
 .dot {
@@ -110,22 +113,13 @@ body {
   bottom: 6px;
 }
 
-.active .dot {
-  background: white;
-}
+.active .dot { background: white; }
 
 .schedule-box {
   margin-top: 24px;
   border-top: 1px solid #f0f0f0;
   padding-top: 20px;
   text-align: left;
-}
-
-.date-label {
-  font-weight: 700;
-  font-size: 0.9rem;
-  margin-bottom: 12px;
-  color: #333;
 }
 
 .event-input {
@@ -139,12 +133,6 @@ body {
   padding: 10px;
   border: 1px solid #ddd;
   border-radius: 8px;
-  font-size: 0.9rem;
-  outline: none;
-}
-
-.event-input input:focus {
-  border-color: #646cff;
 }
 
 .event-input button {
@@ -154,15 +142,6 @@ body {
   padding: 0 15px;
   border-radius: 8px;
   cursor: pointer;
-  font-weight: 600;
-}
-
-.list {
-  list-style: none;
-  padding: 0;
-  margin: 0;
-  max-height: 160px;
-  overflow-y: auto;
 }
 
 .event-item {
@@ -173,19 +152,19 @@ body {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  font-size: 0.85rem;
   border: 1px solid #f0f0f0;
 }
 
-.delete-btn {
-  background: transparent;
-  color: #ff4d4f;
-  border: none;
-  font-size: 1.2rem;
+.complete-btn {
+  background: #e6fffa;
+  color: #38b2ac;
+  border: 1px solid #38b2ac;
+  border-radius: 4px;
   cursor: pointer;
-  padding: 0 4px;
+  font-weight: bold;
 }
 
-.delete-btn:hover {
-  color: #d9363e;
+.complete-btn:hover {
+  background: #38b2ac;
+  color: white;
 }
